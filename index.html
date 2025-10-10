@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Lakshya — Study Journal</title>
+
+  <!-- Google Font: Patrick Hand -->
+  <link href="https://fonts.googleapis.com/css2?family=Patrick+Hand&display=swap" rel="stylesheet">
+
+  <!-- Chart.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="app">
+    <header class="topbar">
+      <h1>Lakshya</h1>
+      <div class="top-actions">
+        <button id="openJournalBtn" class="btn small">Locked Journal</button>
+        <button id="refreshCompletedBtn" class="btn small ghost">Clear Completed</button>
+      </div>
+    </header>
+
+    <main class="grid">
+      <section class="card dashboard">
+        <div class="row space-between">
+          <h2>Today</h2>
+          <div id="motivationDay" class="motivation">Motivational message</div>
+        </div>
+
+        <div class="row">
+          <div class="card small">
+            <h3>Timer</h3>
+            <div class="timer-visual">
+              <svg id="timerSvg" viewBox="0 0 120 120">
+                <circle class="bg" cx="60" cy="60" r="52"></circle>
+                <circle class="progress" cx="60" cy="60" r="52" stroke-dasharray="326.7" stroke-dashoffset="0"></circle>
+                <text id="timerText" x="60" y="66" text-anchor="middle" class="timer-text">25:00</text>
+              </svg>
+            </div>
+
+            <div class="timer-controls">
+              <div class="row">
+                <label>Focus</label>
+                <input id="focusMin" type="number" min="1" value="25">m
+                <label>Break</label>
+                <input id="breakMin" type="number" min="1" value="5">m
+              </div>
+              <div class="row">
+                <button id="startTimer" class="btn">Start</button>
+                <button id="pauseTimer" class="btn ghost">Pause</button>
+                <button id="resetTimer" class="btn ghost">Reset</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="card small">
+            <h3>Today's Tasks</h3>
+            <ul id="todayTasks" class="task-list"></ul>
+            <div class="row">
+              <input id="taskTitle" placeholder="Task title">
+              <select id="taskSubject"></select>
+              <input id="taskDeadline" type="date">
+              <select id="taskStatus">
+                <option value="not">Not Started</option>
+                <option value="half">Half Finished</option>
+                <option value="done">Complete</option>
+              </select>
+              <button id="addTask" class="btn small">Add</button>
+            </div>
+          </div>
+
+          <div class="card small">
+            <h3>Quick Stats</h3>
+            <div id="stats">
+              <div>Focus sessions today: <span id="sessionsToday">0</span></div>
+              <div>Tasks done today: <span id="tasksDoneToday">0</span></div>
+              <div>Syllabus progress: <span id="syllabusPct">0%</span></div>
+            </div>
+
+            <h3>Long-term Goals</h3>
+            <ul class="goals">
+              <li>99%+ in X, XI, XII</li>
+              <li>100/100 in all subjects</li>
+              <li>CLAT AIR 1</li>
+              <li>UPSC AIR 1</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section class="card wide">
+        <h2>Subject-wise Syllabus Tracker</h2>
+        <div class="row">
+          <input id="newSubjectName" placeholder="Subject name">
+          <button id="addSubject" class="btn small">Add Subject</button>
+        </div>
+        <div id="subjectsContainer"></div>
+      </section>
+
+      <section class="card">
+        <h2>Ideas & Notes</h2>
+        <div class="row">
+          <input id="ideaText" placeholder="Quick idea or note">
+          <button id="saveIdea" class="btn small">Save</button>
+        </div>
+        <ul id="ideasList" class="notes-list"></ul>
+      </section>
+
+      <section class="card">
+        <h2>Shloka</h2>
+        <textarea id="shlokaArea" placeholder="Paste your shloka here"></textarea>
+        <div class="row">
+          <button id="saveShloka" class="btn">Save</button>
+          <button id="deleteShloka" class="btn ghost">Backspace (delete)</button>
+        </div>
+      </section>
+
+      <section class="card wide">
+        <h2>Progress Visuals</h2>
+        <div class="row charts">
+          <canvas id="syllabusPie" width="300" height="200"></canvas>
+          <canvas id="sessionsLine" width="300" height="200"></canvas>
+        </div>
+      </section>
+
+      <section class="card">
+        <h2>Talent & Pattern</h2>
+        <div id="patterns">Weekly patterns will appear here.</div>
+      </section>
+
+    </main>
+
+    <!-- Journal Modal -->
+    <div id="journalModal" class="modal">
+      <div class="modal-content card">
+        <h2>Jai Bhavani — Locked Journal</h2>
+        <div id="journalAuth">
+          <input id="journalPwd" placeholder="Enter password">
+          <button id="unlockJournal" class="btn">Unlock</button>
+        </div>
+
+        <div id="journalPanel" style="display:none;">
+          <div class="row">
+            <input id="entryTitle" placeholder="Title">
+            <button id="saveEntry" class="btn small">Save</button>
+          </div>
+          <textarea id="entryBody" placeholder="Write your entry"></textarea>
+          <ul id="entriesList" class="notes-list"></ul>
+          <div class="row">
+            <button id="closeJournal" class="btn ghost">Close</button>
+            <button id="lockJournal" class="btn ghost">Lock</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <footer class="bottombar">
+      <div class="row">
+        <div>App: Lakshya — LocalStorage only</div>
+        <div id="versionInfo">v1.0</div>
+      </div>
+    </footer>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
