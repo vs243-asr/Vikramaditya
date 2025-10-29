@@ -1,51 +1,257 @@
-:root{
-  --bg:#f6fbff;
-  --card:#ffffff;
-  --blue-1:#e6f0ff;
-  --blue-2:#cfe6ff;
-  --accent:#1e6fbf;
-  --muted:#6b7b8f;
-  --radius:14px;
-  font-family: 'Patrick Hand', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
-*{box-sizing:border-box}
-html,body,#app{height:100%;}
-body{
-  margin:0; background:var(--bg); color:#0b2540; -webkit-font-smoothing:antialiased; padding:18px; font-size:16px;
+body {
+  font-family: 'Patrick Hand', cursive;
+  background: linear-gradient(to bottom, #e3f2fd, #bbdefb);
+  color: #0d47a1;
+  min-height: 100vh;
 }
-.topbar{display:flex;align-items:center;justify-content:space-between;padding:10px 16px;border-radius:12px;background:linear-gradient(90deg,var(--card),var(--blue-1));box-shadow:0 6px 18px rgba(8,30,60,0.06);}
-.topbar h1{margin:0;font-size:26px}
-.btn{background:var(--accent);color:white;border:none;padding:8px 10px;border-radius:12px;cursor:pointer;font-weight:600}
-.btn.ghost{background:transparent;color:var(--accent);border:2px solid rgba(30,111,191,0.12)}
-.btn.small{padding:6px 8px;font-size:14px;border-radius:10px}
-.small{font-size:14px}
-.grid{display:grid;grid-template-columns:1fr;gap:14px;margin-top:14px}
-.card{background:var(--card);padding:14px;border-radius:var(--radius);box-shadow:0 8px 30px rgba(16,40,80,0.04)}
-.card.wide{grid-column:1}
-.row{display:flex;gap:10px;align-items:center}
-.space-between{justify-content:space-between}
-.card.small{min-width:220px}
-.timer-visual{width:120px;height:120px;margin:0 auto}
-svg{display:block;width:120px;height:120px}
-.timer-text{font-size:18px;fill:#08304a;font-weight:700}
-circle.bg{fill:none;stroke:#f1f6fb;stroke-width:12}
-circle.progress{fill:none;stroke:var(--accent);stroke-width:12;stroke-linecap:round;transform:rotate(-90deg);transform-origin:60px 60px}
-.task-list{list-style:none;padding:0;margin:8px 0;max-height:150px;overflow:auto}
-.notes-list{list-style:none;padding:0;margin:8px 0}
-.task-item{display:flex;justify-content:space-between;align-items:center;padding:8px;border-radius:10px;background:var(--blue-1);margin-bottom:8px}
-.task-meta{font-size:13px;color:var(--muted)}
-input,textarea,select{padding:8px;border-radius:10px;border:1px solid rgba(20,60,110,0.06);font-family:inherit}
-textarea{min-height:80px}
-.motivation{background:linear-gradient(90deg,var(--blue-1),var(--blue-2));padding:6px 10px;border-radius:10px;font-weight:700}
-.top-actions{display:flex;gap:8px}
-.charts{gap:18px}
-.modal{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(6,20,40,0.25);backdrop-filter:blur(2px);}
-.modal-content{width:min(920px,96%);}
-.footer{margin-top:24px}
-.goals{margin:0;padding-left:18px}
-#journalModal{display:none}
-@media(min-width:900px){
-  .grid{grid-template-columns:repeat(2,1fr)}
-  .card.wide{grid-column:1 / -1}
+
+.container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 20px;
+  justify-content: center;
+}
+
+.nav-btn {
+  padding: 10px 16px;
+  background: white;
+  border: 2px solid #90caf9;
+  color: #1976d2;
+  border-radius: 25px;
+  cursor: pointer;
+  font: inherit;
+  font-size: 1rem;
+  transition: all 0.3s;
+}
+
+.nav-btn:hover, .nav-btn.active {
+  background: #1976d2;
+  color: white;
+  border-color: #1976d2;
+}
+
+.tab {
+  display: none;
+}
+
+.tab.active {
+  display: block;
+}
+
+.card {
+  background: white;
+  padding: 20px;
+  border-radius: 20px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  margin-bottom: 20px;
+}
+
+h2, h3 {
+  color: #1976d2;
+  margin-bottom: 15px;
+  text-align: center;
+}
+
+input, textarea, button, select {
+  font: inherit;
+  margin: 5px;
+  padding: 8px 12px;
+  border-radius: 15px;
+  border: 1px solid #90caf9;
+}
+
+button {
+  background: #bbdefb;
+  color: #1976d2;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+button:hover {
+  background: #1976d2;
+  color: white;
+}
+
+.task-input, .subject-input {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 15px;
+}
+
+.task-filters {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 15px;
+}
+
+.filter-btn {
+  padding: 6px 12px;
+  font-size: 0.9rem;
+}
+
+.filter-btn.active {
+  background: #1976d2;
+  color: white;
+}
+
+#task-list, #subjects-list, #journal-entries, #notes-list {
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.task-item, .subject-item, .journal-entry, .note-item {
+  background: #e3f2fd;
+  padding: 10px;
+  border-radius: 15px;
+  margin: 8px 0;
+  position: relative;
+}
+
+.task-item input[type="checkbox"] {
+  margin-right: 10px;
+}
+
+.task-item select {
+  width: auto;
+  display: inline-block;
+}
+
+.timer-circle {
+  position: relative;
+  width: 100px;
+  height: 100px;
+  margin: 20px auto;
+}
+
+.timer-circle svg {
+  transform: rotate(-90deg);
+}
+
+.timer-circle circle {
+  fill: none;
+  stroke: #e0e0e0;
+  stroke-width: 8;
+}
+
+#timer-progress {
+  stroke: #1976d2;
+  stroke-linecap: round;
+  transition: stroke-dashoffset 0.5s;
+  stroke-dasharray: 283;
+  stroke-dashoffset: 283;
+}
+
+.timer-text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 1.4rem;
+  font-weight: bold;
+}
+
+.timer-controls {
+  text-align: center;
+}
+
+#timer-mode {
+  text-align: center;
+  font-weight: bold;
+  margin-top: 10px;
+  color: #1976d2;
+}
+
+.motivation {
+  background: #e8f5e9;
+  padding: 15px;
+  border-radius: 15px;
+  margin: 15px 0;
+  font-style: italic;
+  text-align: center;
+  color: #2e7d32;
+}
+
+.goals ul {
+  list-style: none;
+}
+
+.goals li:before {
+  content: "★ ";
+  color: #1976d2;
+}
+
+.hidden { display: none; }
+
+.shloka-box {
+  background: #e8f5ff;
+  padding: 20px;
+  border-radius: 15px;
+  margin-top: 15px;
+  white-space: pre-line;
+  min-height: 80px;
+  font-size: 1.1rem;
+}
+
+.progress-bar {
+  height: 20px;
+  background: #e0e0e0;
+  border-radius: 10px;
+  overflow: hidden;
+  margin: 10px 0;
+}
+
+.progress-bar > div {
+  height: 100%;
+  background: #1976d2;
+  width: 0%;
+  transition: width 0.5s;
+}
+
+.h-bar {
+  height: 20px;
+  background: #e0e0e0;
+  border-radius: 10px;
+  overflow: hidden;
+  display: inline-block;
+  width: 70%;
+  margin-left: 10px;
+}
+
+.h-bar > div {
+  height: 100%;
+  background: #42a5f5;
+  width: 0%;
+  transition: width 0.5s;
+}
+
+.weekly-bars, .monthly-bars {
+  margin: 15px 0;
+  font-size: 0.95rem;
+}
+
+canvas {
+  margin: 15px auto;
+  display: block;
+}
+
+.hint {
+  font-size: 0.8rem;
+  color: #666;
+  text-align: center;
+  margin-top: 5px;
 }
