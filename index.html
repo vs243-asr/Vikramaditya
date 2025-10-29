@@ -1,168 +1,161 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Lakshya — Study Journal</title>
-
-  <!-- Google Font: Patrick Hand -->
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Lakshya</title>
   <link href="https://fonts.googleapis.com/css2?family=Patrick+Hand&display=swap" rel="stylesheet">
-
-  <!-- Chart.js CDN -->
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <div id="app">
-    <header class="topbar">
-      <h1>Lakshya</h1>
-      <div class="top-actions">
-        <button id="openJournalBtn" class="btn small">Locked Journal</button>
-        <button id="refreshCompletedBtn" class="btn small ghost">Clear Completed</button>
+  <div class="container">
+    <!-- Navigation -->
+    <nav class="nav">
+      <button class="nav-btn active" data-tab="dashboard">Dashboard</button>
+      <button class="nav-btn" data-tab="timer">Timer</button>
+      <button class="nav-btn" data-tab="todo">To-Do</button>
+      <button class="nav-btn" data-tab="syllabus">Syllabus</button>
+      <button class="nav-btn" data-tab="journal">Journal</button>
+      <button class="nav-btn" data-tab="shloka">Shloka</button>
+      <button class="nav-btn" data-tab="notes">Notes</button>
+      <button class="nav-btn" data-tab="analytics">Analytics</button>
+    </nav>
+
+    <!-- Tabs -->
+    <div id="dashboard" class="tab active">
+      <div class="card">
+        <h2>Today</h2>
+        <p id="today-date"></p>
+        <div id="today-tasks"></div>
+        <div class="timer-status">Timer: <span id="timer-display">Off</span></div>
+        <div class="stats">
+          <p>Tasks Done: <span id="tasks-done">0</span></p>
+          <p>Focus Time: <span id="focus-time">0 min</span></p>
+        </div>
+        <div class="motivation">
+          <p id="motivational-quote"></p>
+        </div>
       </div>
-    </header>
+      <div class="card goals">
+        <h3>Long-Term Goals</h3>
+        <ul>
+          <li>99%+ in X, XI, and XII</li>
+          <li>100/100 in all subjects</li>
+          <li>CLAT AIR 1</li>
+          <li>UPSC AIR 1</li>
+        </ul>
+      </div>
+    </div>
 
-    <main class="grid">
-      <section class="card dashboard">
-        <div class="row space-between">
-          <h2>Today</h2>
-          <div id="motivationDay" class="motivation">Motivational message</div>
+    <div id="timer" class="tab">
+      <div class="card timer-card">
+        <h2>Focus Timer</h2>
+        <div class="timer-circle">
+          <svg><circle cx="50" cy="50" r="45"></circle><circle cx="50" cy="50" r="45" id="timer-progress"></circle></svg>
+          <div class="timer-text" id="timer-text">25:00</div>
         </div>
-
-        <div class="row">
-          <div class="card small">
-            <h3>Timer</h3>
-            <div class="timer-visual">
-              <svg id="timerSvg" viewBox="0 0 120 120">
-                <circle class="bg" cx="60" cy="60" r="52"></circle>
-                <circle class="progress" cx="60" cy="60" r="52" stroke-dasharray="326.7" stroke-dashoffset="0"></circle>
-                <text id="timerText" x="60" y="66" text-anchor="middle" class="timer-text">25:00</text>
-              </svg>
-            </div>
-
-            <div class="timer-controls">
-              <div class="row">
-                <label>Focus</label>
-                <input id="focusMin" type="number" min="1" value="25">m
-                <label>Break</label>
-                <input id="breakMin" type="number" min="1" value="5">m
-              </div>
-              <div class="row">
-                <button id="startTimer" class="btn">Start</button>
-                <button id="pauseTimer" class="btn ghost">Pause</button>
-                <button id="resetTimer" class="btn ghost">Reset</button>
-              </div>
-            </div>
-          </div>
-
-          <div class="card small">
-            <h3>Today's Tasks</h3>
-            <ul id="todayTasks" class="task-list"></ul>
-            <div class="row">
-              <input id="taskTitle" placeholder="Task title">
-              <select id="taskSubject"></select>
-              <input id="taskDeadline" type="date">
-              <select id="taskStatus">
-                <option value="not">Not Started</option>
-                <option value="half">Half Finished</option>
-                <option value="done">Complete</option>
-              </select>
-              <button id="addTask" class="btn small">Add</button>
-            </div>
-          </div>
-
-          <div class="card small">
-            <h3>Quick Stats</h3>
-            <div id="stats">
-              <div>Focus sessions today: <span id="sessionsToday">0</span></div>
-              <div>Tasks done today: <span id="tasksDoneToday">0</span></div>
-              <div>Syllabus progress: <span id="syllabusPct">0%</span></div>
-            </div>
-
-            <h3>Long-term Goals</h3>
-            <ul class="goals">
-              <li>99%+ in X, XI, XII</li>
-              <li>100/100 in all subjects</li>
-              <li>CLAT AIR 1</li>
-              <li>UPSC AIR 1</li>
-            </ul>
-          </div>
+        <div class="timer-controls">
+          <input type="number" id="focus-min" value="25" min="1"> min focus
+          <input type="number" id="break-min" value="5" min="1"> min break
+          <button id="timer-start">Start</button>
+          <button id="timer-pause">Pause</button>
+          <button id="timer-reset">Reset</button>
         </div>
-      </section>
+        <p id="timer-mode">Focus Mode</p>
+      </div>
+    </div>
 
-      <section class="card wide">
-        <h2>Subject-wise Syllabus Tracker</h2>
-        <div class="row">
-          <input id="newSubjectName" placeholder="Subject name">
-          <button id="addSubject" class="btn small">Add Subject</button>
+    <div id="todo" class="tab">
+      <div class="card">
+        <h2>To-Do List</h2>
+        <div class="task-input">
+          <input type="text" id="task-title" placeholder="Task title">
+          <input type="date" id="task-deadline">
+          <input type="text" id="task-subject" placeholder="Subject">
+          <button id="add-task">Add</button>
         </div>
-        <div id="subjectsContainer"></div>
-      </section>
-
-      <section class="card">
-        <h2>Ideas & Notes</h2>
-        <div class="row">
-          <input id="ideaText" placeholder="Quick idea or note">
-          <button id="saveIdea" class="btn small">Save</button>
+        <div class="task-filters">
+          <button class="filter-btn active" data-filter="today">Today</button>
+          <button class="filter-btn" data-filter="upcoming">Upcoming</button>
+          <button class="filter-btn" data-filter="all">All</button>
+          <button id="clear-completed">Clear Completed</button>
         </div>
-        <ul id="ideasList" class="notes-list"></ul>
-      </section>
+        <div id="task-list"></div>
+      </div>
+    </div>
 
-      <section class="card">
-        <h2>Shloka</h2>
-        <textarea id="shlokaArea" placeholder="Paste your shloka here"></textarea>
-        <div class="row">
-          <button id="saveShloka" class="btn">Save</button>
-          <button id="deleteShloka" class="btn ghost">Backspace (delete)</button>
+    <div id="syllabus" class="tab">
+      <div class="card">
+        <h2>Syllabus Tracker</h2>
+        <div class="subject-input">
+          <input type="text" id="new-subject" placeholder="Add subject">
+          <button id="add-subject">Add</button>
         </div>
-      </section>
-
-      <section class="card wide">
-        <h2>Progress Visuals</h2>
-        <div class="row charts">
-          <canvas id="syllabusPie" width="300" height="200"></canvas>
-          <canvas id="sessionsLine" width="300" height="200"></canvas>
-        </div>
-      </section>
-
-      <section class="card">
-        <h2>Talent & Pattern</h2>
-        <div id="patterns">Weekly patterns will appear here.</div>
-      </section>
-
-    </main>
-
-    <!-- Journal Modal -->
-    <div id="journalModal" class="modal">
-      <div class="modal-content card">
-        <h2>Jai Bhavani — Locked Journal</h2>
-        <div id="journalAuth">
-          <input id="journalPwd" placeholder="Enter password">
-          <button id="unlockJournal" class="btn">Unlock</button>
-        </div>
-
-        <div id="journalPanel" style="display:none;">
-          <div class="row">
-            <input id="entryTitle" placeholder="Title">
-            <button id="saveEntry" class="btn small">Save</button>
-          </div>
-          <textarea id="entryBody" placeholder="Write your entry"></textarea>
-          <ul id="entriesList" class="notes-list"></ul>
-          <div class="row">
-            <button id="closeJournal" class="btn ghost">Close</button>
-            <button id="lockJournal" class="btn ghost">Lock</button>
-          </div>
+        <div id="subjects-list"></div>
+        <div class="overall-progress">
+          <h3>Overall Completion</h3>
+          <div class="progress-bar"><div id="overall-progress-bar"></div></div>
+          <p id="overall-percent">0%</p>
         </div>
       </div>
     </div>
 
-    <footer class="bottombar">
-      <div class="row">
-        <div>App: Lakshya — LocalStorage only</div>
-        <div id="versionInfo">v1.0</div>
+    <div id="journal" class="tab">
+      <div class="card">
+        <h2>Locked Journal</h2>
+        <div id="journal-lock">
+          <input type="password" id="journal-pass" placeholder="Enter password">
+          <button id="unlock-journal">Unlock</button>
+          <p class="hint">Hint: jai bhavani</p>
+        </div>
+        <div id="journal-content" class="hidden">
+          <textarea id="journal-entry" placeholder="Write your thoughts..."></textarea>
+          <button id="save-entry">Save Entry</button>
+          <div id="journal-entries"></div>
+        </div>
       </div>
-    </footer>
+    </div>
+
+    <div id="shloka" class="tab">
+      <div class="card">
+        <h2>Shloka / Notes</h2>
+        <textarea id="shloka-input" placeholder="Paste your shloka or note here..."></textarea>
+        <button id="save-shloka">Save</button>
+        <button id="clear-shloka">Clear</button>
+        <div id="shloka-display" class="shloka-box"></div>
+      </div>
+    </div>
+
+    <div id="notes" class="tab">
+      <div class="card">
+        <h2>Ideas & Notes</h2>
+        <textarea id="note-input" placeholder="Quick note..."></textarea>
+        <button id="save-note">Save</button>
+        <label><input type="checkbox" id="pin-note"> Pin</label>
+        <div id="notes-list"></div>
+      </div>
+    </div>
+
+    <div id="analytics" class="tab">
+      <div class="card">
+        <h2>Progress Visualization</h2>
+        <canvas id="syllabus-pie" width="200" height="200"></canvas>
+        <canvas id="weekly-line" width="300" height="150"></canvas>
+
+        <h3>Weekly Summary</h3>
+        <div class="weekly-bars">
+          <div>Study Hours: <div class="h-bar"><div id="weekly-hours" style="width:0%"></div></div></div>
+          <div>Tasks Done: <div class="h-bar"><div id="weekly-tasks" style="width:0%"></div></div></div>
+        </div>
+
+        <h3>Monthly Overview</h3>
+        <div class="monthly-bars">
+          <div>Study Hours: <span id="monthly-hours">0</span>h</div>
+          <div>Tasks: <span id="monthly-tasks">0</span></div>
+          <div>Consistency: <span id="consistency">0</span>/30 days</div>
+        </div>
+      </div>
+    </div>
   </div>
 
   <script src="script.js"></script>
